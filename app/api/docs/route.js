@@ -1,6 +1,11 @@
 import { NextResponse } from 'next/server';
 
-const spec = {
+export function GET(request) {
+  const host = request.headers.get('host') || 'localhost:3001';
+  const protocol = host.startsWith('localhost') || host.startsWith('127.') ? 'http' : 'http';
+  const serverUrl = `${protocol}://${host}`;
+
+  const spec = {
   openapi: '3.0.3',
   info: {
     title: 'Restaurant SaaS API',
@@ -8,7 +13,7 @@ const spec = {
     description: 'REST API for Restaurant SaaS — authentication and order management.',
   },
   servers: [
-    { url: 'http://localhost:3001', description: 'Local development server' },
+    { url: serverUrl, description: 'API Server' },
   ],
   components: {
     securitySchemes: {
@@ -309,6 +314,5 @@ const spec = {
   },
 };
 
-export function GET() {
   return NextResponse.json(spec);
 }
